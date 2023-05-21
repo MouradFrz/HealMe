@@ -558,6 +558,10 @@ video {
   }
 }
 
+.m-auto{
+  margin: auto;
+}
+
 .mt-10{
   margin-top: 2.5rem;
 }
@@ -574,6 +578,10 @@ video {
   height: 15rem;
 }
 
+.h-\[calc\(100vh-86px\)\]{
+  height: calc(100vh - 86px);
+}
+
 .min-h-\[100vh\]{
   min-height: 100vh;
 }
@@ -584,6 +592,23 @@ video {
 
 .w-\[300px\]{
   width: 300px;
+}
+
+.w-\[40\%\]{
+  width: 40%;
+}
+
+.w-\[50\%\]{
+  width: 50%;
+}
+
+.w-\[60\%\]{
+  width: 60%;
+}
+
+.w-fit{
+  width: -moz-fit-content;
+  width: fit-content;
 }
 
 .max-w-\[200px\]{
@@ -630,8 +655,16 @@ video {
   border-width: 1px;
 }
 
+.border-b-2{
+  border-bottom-width: 2px;
+}
+
 .border-b-\[1px\]{
   border-bottom-width: 1px;
+}
+
+.border-r-2{
+  border-right-width: 2px;
 }
 
 .border-white\/20{
@@ -642,19 +675,27 @@ video {
   border-color: rgb(255 255 255 / 0.4);
 }
 
+.border-b-blue-700\/60{
+  border-bottom-color: rgb(29 78 216 / 0.6);
+}
+
+.border-r-blue-700\/60{
+  border-right-color: rgb(29 78 216 / 0.6);
+}
+
 .bg-blue-700{
   --tw-bg-opacity: 1;
   background-color: rgb(29 78 216 / var(--tw-bg-opacity));
 }
 
-.bg-white{
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-}
-
 .bg-slate-300{
   --tw-bg-opacity: 1;
   background-color: rgb(203 213 225 / var(--tw-bg-opacity));
+}
+
+.bg-white{
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
 .bg-\[url\(\'\.\.\/images\/main_bg\.jpg\'\)\]{
@@ -667,6 +708,11 @@ video {
 
 .bg-no-repeat{
   background-repeat: no-repeat;
+}
+
+.object-cover{
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 .p-5{
@@ -701,6 +747,10 @@ video {
   padding-right: 5rem;
 }
 
+.text-center{
+  text-align: center;
+}
+
 .text-3xl{
   font-size: 1.875rem;
   line-height: 2.25rem;
@@ -709,6 +759,10 @@ video {
 .text-4xl{
   font-size: 2.25rem;
   line-height: 2.5rem;
+}
+
+.text-\[10rem\]{
+  font-size: 10rem;
 }
 
 .text-\[2\.6rem\]{
@@ -723,18 +777,6 @@ video {
 .text-xs{
   font-size: 0.75rem;
   line-height: 1rem;
-}
-
-.text-\[4rem\]{
-  font-size: 4rem;
-}
-
-.text-\[8rem\]{
-  font-size: 8rem;
-}
-
-.text-\[10rem\]{
-  font-size: 10rem;
 }
 
 .font-bold{
@@ -762,13 +804,14 @@ video {
   color: rgb(0 0 0 / var(--tw-text-opacity));
 }
 
-.text-\[\]{
-  color: ;
-}
-
 .text-blue-800{
   --tw-text-opacity: 1;
   color: rgb(30 64 175 / var(--tw-text-opacity));
+}
+
+.text-blue-700{
+  --tw-text-opacity: 1;
+  color: rgb(29 78 216 / var(--tw-text-opacity));
 }
 
 .shadow-lg{
@@ -782,45 +825,38 @@ video {
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 
-*{
-  font-family: 'Nunito Sans', sans-serif;
-}
-
-.container{
-  margin: auto;
-  width: 95%;
-  max-width: 1200px;
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
-}
-
-.flex-list a{
-  display: block;
-  border-radius: 9999px;
-  border-width: 1px;
-  border-color: transparent;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-  font-weight: 600;
+.transition-all{
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
 
-.flex-list a:hover{
-  border-color: rgb(255 255 255 / 0.3);
-  --tw-bg-opacity: 1;
-  background-color: rgb(30 64 175 / var(--tw-bg-opacity));
-}
-
-.numbers button{
+.btn-default{
   border-radius: 9999px;
   border-width: 1px;
-  border-color: rgb(255 255 255 / 0.4);
+  --tw-border-opacity: 1;
+  border-color: rgb(29 78 216 / var(--tw-border-opacity));
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   padding-left: 1.25rem;
   padding-right: 1.25rem;
+}
+
+label{
+  font-weight: 600;
+}
+
+input{
+  margin-bottom: 1rem;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(29 78 216 / var(--tw-border-opacity));
+  padding: 0.5rem;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.hover\:bg-blue-400:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(96 165 250 / var(--tw-bg-opacity));
 }
