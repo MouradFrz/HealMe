@@ -6,10 +6,14 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
 session_start();
 //Autoloader
 require '../vendor/autoload.php';
-
+require '../src/Helpers/AuthHelpers.php';
+require '../src/Helpers/RouterHelpers.php';
+require '../src/Helpers/SessionHelpers.php';
 //Env variables setup
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__. '/../');
 $dotenv->load();
 
 //Loading the routes registered in Routes.php
 require '../src/Routing/Routes.php';
+
+clearSessionMessages();

@@ -22,19 +22,24 @@ class HomeController
 
         require_once '../src/Views/home.php';
     }
-    public static function Error404(){
+    public static function Error404()
+    {
         require_once '../src/Views/404.php';
     }
-    public static function Error403(){
+    public static function Error403()
+    {
         require_once '../src/Views/403.php';
     }
-    public static function Error401(){
+    public static function Error401()
+    {
         require_once '../src/Views/401.php';
     }
-    public static function login(){
+    public static function login()
+    {
         require_once '../src/Views/login.php';
     }
-    public static function register(){
+    public static function register()
+    {
         require_once '../src/Views/register.php';
     }
 }

@@ -25,7 +25,10 @@
         </div>
         <div class="w-[60%] flex flex-col items-center justify-center">
             <h1 class="text-center text-3xl font-bold">Login</h1>
-            <form action="" class="flex flex-col w-[50%]">
+            <form action="check" method="POST" class="flex flex-col w-[50%]">
+                <?php if (inSession('error')) { ?>
+                    <p class="font-semibold text-red-600"><?= sessionVar('error') ?></p>
+                <?php } ?>
                 <label for="email">Email</label>
                 <input type="text" id="email" name="email">
                 <label for="password">Password</label>
