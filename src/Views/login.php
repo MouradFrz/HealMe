@@ -32,7 +32,7 @@
                 <label for="email">Email</label>
                 <input type="text" id="email" name="email">
                 <label for="password">Password</label>
-                <input type="text" id="password" name="password">
+                <input type="password" id="password" name="password">
                 <button class="btn-default w-fit hover:bg-blue-400 transition-all ">Login</button>
             </form>
             <a href="/register" class="text-blue-700">I do not have an account yet.</a>

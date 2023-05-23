@@ -34,14 +34,17 @@
             </div>
         </nav>
         <main class="py-14">
-            <div>
+            <div class="flex items-center">
                 <p class="max-w-[700px] text-[2.6rem] font-semibold letter tracking-wide drop-shadow-lg leading-relaxed">Over a long period of work we have provided hundreds of thousands of healthcare services</p>
+                <div class="w-full">
+                    <a href="/register" class="block w-fit m-auto bg-white text-black rounded-full font-semibold px-4 py-2">Get Started!</a>
+                </div>
             </div>
             <div class="flex justify-between mt-10">
-                <div class=" flex ">
+                <div class="flex">
                     <p class="font-semibold text-xl pr-20">Facts</p>
                     <div class="w-[300px]">
-                        <p class="border-b-[1px]  border-white/40 pb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, tenetur.</p>
+                        <p class="border-b-[1px] border-white/40 pb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, tenetur.</p>
                         <p class="border-b-[1px] border-white/40 pb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, tenetur.</p>
                         <p class="border-b-[1px] border-white/40 pb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex, tenetur.</p>
                     </div>
@@ -50,7 +53,7 @@
                     <p class="max-w-[70%]">Take the discount for the first visit for all types of doctors.</p>
                     <div class="flex justify-between items-center">
                         <h3 class="text-4xl italic font-bold">20%</h3>
-                        <a href="" class="bg-white text-black rounded-full font-semibold px-4 py-2">Make an appointment!</a>
+                        <a href="/login" class="bg-white text-black rounded-full font-semibold px-4 py-2">Make an appointment!</a>
                     </div>
                 </div>
             </div>

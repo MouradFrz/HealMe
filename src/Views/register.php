@@ -25,15 +25,21 @@
         </div>
         <div class="w-[60%] flex flex-col items-center justify-center">
             <h1 class="text-center text-3xl font-bold">Register</h1>
-            <form action="" class="flex flex-col w-[50%]">
+            <form action="/user/create" method="POST" class="flex flex-col w-[50%]">
+                <?php if (inSession('error')) { ?>
+                    <p class="font-semibold text-red-600"><?= sessionVar('error') ?></p>
+                <?php } ?>
+                <?php if (inSession('success')) { ?>
+                    <p class="font-semibold text-green-600"><?= sessionVar('success') ?></p>
+                <?php } ?>
                 <label for="fullname">Full name</label>
                 <input type="text" id="fullname" name="fullname">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email">
                 <label for="password">Password</label>
-                <input type="text" id="password" name="password">
+                <input type="password" id="password" name="password">
                 <label for="confirmpassword">Confirm password</label>
-                <input type="text" id="confirmpassword" name="confirmpassword">
+                <input type="password" id="confirmpassword" name="confirmpassword">
                 <button class="btn-default w-fit hover:bg-blue-400 transition-all ">Register</button>
             </form>
             <a href="/login" class="text-blue-700">I already have an account.</a>

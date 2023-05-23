@@ -42,4 +42,7 @@ class HomeController
     {
         require_once '../src/Views/register.php';
     }
+    public static function dashboard(){
+        require_once '../src/Views/dashboard.php';
+    }
 }
