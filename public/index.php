@@ -6,7 +6,6 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
 session_start();
 //Autoloader
 require '../vendor/autoload.php';
-require '../src/Helpers/AuthHelpers.php';
 require '../src/Helpers/RouterHelpers.php';
 require '../src/Helpers/SessionHelpers.php';
 //Env variables setup

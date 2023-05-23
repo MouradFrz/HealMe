@@ -15,9 +15,9 @@ class AuthController
         $data = $collection->find(["email" => $email])->toArray();
         var_dump($data);
         if (count($data)) {
-            if (password_verify($password, $data[0]->password)){
+            if (password_verify($password, $data[0]->password)) {
                 $_SESSION['user'] = $email;
-                redirect('/');
+                redirect('/dashboard');
             }
         } else {
             loadSession(["error" => "Invalid credentials"]);
@@ -51,5 +51,10 @@ class AuthController
         ]);
         loadSession(["success" => "Registered successfully."]);
         redirect('/register');
+    }
+    public static function logout()
+    {
+        unset($_SESSION["user"]);
+        redirect("/");
     }
 }

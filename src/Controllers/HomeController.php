@@ -42,7 +42,19 @@ class HomeController
     {
         require_once '../src/Views/register.php';
     }
-    public static function dashboard(){
+    public static function dashboard()
+    {
+        $nosql = new NoSql();
+        $collection = $nosql->getUsersCollection();
+        $data = $collection->find(
+            ["email" => $_SESSION["user"]],
+            ["projection" => [
+                "fullname" => true,
+                "email" => true,
+                "_id"=>false,
+            ]]
+        )->toArray();
+        loadSession(["userData" => $data[0]]);
         require_once '../src/Views/dashboard.php';
     }
 }

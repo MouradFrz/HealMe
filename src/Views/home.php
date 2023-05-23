@@ -35,7 +35,7 @@
         </nav>
         <main class="py-14">
             <div class="flex items-center">
-                <p class="max-w-[700px] text-[2.6rem] font-semibold letter tracking-wide drop-shadow-lg leading-relaxed">Over a long period of work we have provided hundreds of thousands of healthcare services</p>
+                <p class="max-w-[700px] text-[2.6rem] font-semibold tracking-wide drop-shadow-lg leading-relaxed">Over a long period of work we have provided hundreds of thousands of healthcare services</p>
                 <div class="w-full">
                     <a href="/register" class="block w-fit m-auto bg-white text-black rounded-full font-semibold px-4 py-2">Get Started!</a>
                 </div>
