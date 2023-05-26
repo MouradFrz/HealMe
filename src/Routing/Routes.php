@@ -1,6 +1,7 @@
 <?php
 
 use App\Controllers\AuthController;
+use App\Controllers\BookingController;
 use App\Routing\Router;
 use App\Controllers\HomeController;
 $router = new Router();
@@ -14,6 +15,7 @@ $router->post('/check',[AuthController::class,'check'],["guest","user"]);
 $router->post('/user/create',[AuthController::class,'create'],["guest","user"]);
 $router->get("/dashboard",[HomeController::class,'dashboard'],["auth","user"]);
 $router->post('/logout',[AuthController::class,'logout'],["auth","user"]);
+$router->get("/book",[BookingController::class,'book'],["auth","user"]);
 try {
     $router->route();
 } catch (Exception $e) {

@@ -12,21 +12,3 @@ body {
 .container {
     @apply max-w-[1200px] w-[95%] m-auto;
 }
-.btn-default {
-    @apply border-[1px] border-white/30 py-1 px-5 rounded-md bg-blue-700 font-bold text-white/80;
-}
-.section {
-    @apply h-[50%] border-l-[1px] border-blue-400;
-}
-.section.long{
-    @apply h-full;
-}
-.section > div {
-    @apply flex justify-between items-center ;
-}
-.section > div > h2 {
-    @apply text-2xl font-semibold mx-4;
-}
-.section > div > a {
-    @apply btn-default;
-}
