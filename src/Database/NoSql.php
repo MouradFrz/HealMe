@@ -13,4 +13,8 @@ class NoSql{
     public function getUsersCollection(){
         return $this->cluster->HealMe->users;
     }
+    public function getAppointmentsCollection(){
+        return $this->cluster->HealMe->appointments;
+    }
+    
 }

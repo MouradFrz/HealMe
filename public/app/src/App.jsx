@@ -1,8 +1,58 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../../styles/book.css";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import axios from "axios";
+// axios.defaults.withCredentials = true;
+
+const API_BASE = "http://localhost:3000/";
+const days = [
+	"Sunday",
+	"Monday",
+	"Tuesday",
+	"Wednesday",
+	"Thursday",
+	"Friday",
+	"Saturday",
+];
+const months = [
+	"January",
+	"February",
+	"March",
+	"April",
+	"May",
+	"June",
+	"July",
+	"August",
+	"September",
+	"October",
+	"November",
+	"December",
+];
+const APP_TIMES = [
+	"08:00",
+	"08:20",
+	"08:40",
+	"09:00",
+	"09:20",
+	"09:40",
+	"10:00",
+	"10:20",
+	"10:40",
+	"11:00",
+	"11:20",
+	"11:40",
+	"13:00",
+	"13:20",
+	"13:40",
+	"14:00",
+	"14:20",
+	"14:40",
+	"15:00",
+	"15:20",
+	"15:40",
+];
+
 function nth(day) {
 	if (day > 3 && day < 21) return "th";
 	switch (day % 10) {
@@ -16,43 +66,36 @@ function nth(day) {
 			return "th";
 	}
 }
-const days = [
-	"Sunday",
-	"Monday",
-	"Tuesday",
-	"Wednesday",
-	"Thursday",
-	"Friday",
-	"Saturday",
-];
+
 function formatDate(date) {
-	const months = [
-		"January",
-		"February",
-		"March",
-		"April",
-		"May",
-		"June",
-		"July",
-		"August",
-		"September",
-		"October",
-		"November",
-		"December",
-	];
-	return `${days[date.getUTCDay()]}, ${date.getUTCDate()}${nth(
-		date.getUTCDate()
-	)} ${months[date.getUTCMonth()]}`;
+	return `${days[date.getDay()]}, ${date.getDate()}${nth(date.getDate())} ${
+		months[date.getUTCMonth()]
+	}`;
 }
+
 function App() {
 	const [selectedDate, setSelectedDate] = useState(null);
 	const [selectedTime, setSelectedTime] = useState(null);
-	const getTakenAppTimes = async () => {
-		const response = await axios.get("http://localhost:3000/getAppointments", {
-			params: { date: selectedDate },
-		});
-		console.log(response);
-	};
+	const [availableApps, setAvailableApps] = useState(null);
+	// console.log(availableApps)
+	useEffect(() => {
+		if (selectedDate !== null) {
+			axios
+				.get(`${API_BASE}getAppointments`, {
+					params: { date: selectedDate },
+				})
+				.then((response) => {
+					setAvailableApps(
+						APP_TIMES.filter((el) =>
+							!response.data.map((element) => element.time).includes(el)
+						)
+					);
+				});
+		} else {
+			setAvailableApps(null);
+		}
+	}, [selectedDate]);
+
 	return (
 		<>
 			{/* remove the container class before compiling  */}
@@ -60,16 +103,15 @@ function App() {
 				<Calendar
 					value={null}
 					minDetail="month"
+					locale="EN-en"
 					minDate={new Date(2023, 4, 25)}
 					onClickDay={(value) => {
-						if (["Saturday", "Sunday"].includes(days[value.getUTCDay()])) {
-							setSelectedDate(
-								"You can not set an appointment for Saturday or Sunday, please choose another day."
-							);
+						if (["Saturday", "Sunday"].includes(days[value.getDay()])) {
+							setSelectedDate(null);
 							setSelectedTime(null);
 						} else {
 							setSelectedDate(formatDate(value));
-							getTakenAppTimes();
+							setSelectedTime("");
 						}
 					}}
 				/>
@@ -80,7 +122,7 @@ function App() {
 						<div>
 							<p>Date selected : {selectedDate}</p>
 							<p>Select a time for your appointment from the list below</p>
-							{selectedTime ? (
+							{typeof selectedTime === "string" ? (
 								<select
 									name=""
 									id=""
@@ -90,8 +132,9 @@ function App() {
 									}}
 								>
 									<option value="">--:--</option>
-									<option value="dela3a">Hello world</option>
-									<option value="banana">Hello world</option>
+									{availableApps?.map((el,i) => (
+										<option key={i} value={el}>{el}</option>
+									))}
 								</select>
 							) : (
 								""
