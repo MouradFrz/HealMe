@@ -3,7 +3,6 @@ import "../../styles/book.css";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import axios from "axios";
-// axios.defaults.withCredentials = true;
 
 const API_BASE = "http://localhost:3000/";
 const days = [
@@ -52,7 +51,6 @@ const APP_TIMES = [
 	"15:20",
 	"15:40",
 ];
-
 function nth(day) {
 	if (day > 3 && day < 21) return "th";
 	switch (day % 10) {
@@ -66,18 +64,28 @@ function nth(day) {
 			return "th";
 	}
 }
-
 function formatDate(date) {
 	return `${days[date.getDay()]}, ${date.getDate()}${nth(date.getDate())} ${
-		months[date.getUTCMonth()]
-	}`;
+		months[date.getMonth()]
+	} ${date.getFullYear()}`;
 }
-
 function App() {
 	const [selectedDate, setSelectedDate] = useState(null);
 	const [selectedTime, setSelectedTime] = useState(null);
 	const [availableApps, setAvailableApps] = useState(null);
-	// console.log(availableApps)
+	const [error, setError] = useState(null);
+	const [form, setForm] = useState({
+		name: "",
+		reason: "",
+	});
+	const handleNameChange = ({ target }) => {
+		setForm((prev) => ({ ...prev, name: target.value }));
+		setError(null);
+	};
+	const handleReasonChange = ({ target }) => {
+		setForm((prev) => ({ ...prev, reason: target.value }));
+		setError(null);
+	};
 	useEffect(() => {
 		if (selectedDate !== null) {
 			axios
@@ -86,8 +94,8 @@ function App() {
 				})
 				.then((response) => {
 					setAvailableApps(
-						APP_TIMES.filter((el) =>
-							!response.data.map((element) => element.time).includes(el)
+						APP_TIMES.filter(
+							(el) => !response.data.map((element) => element.time).includes(el)
 						)
 					);
 				});
@@ -96,49 +104,95 @@ function App() {
 		}
 	}, [selectedDate]);
 
+	const submitForm = () => {
+		if (form.name && form.reason && selectedTime) {
+			const fd = new FormData();
+			fd.append("name", form.name);
+			fd.append("date", selectedDate);
+			fd.append("time", selectedTime);
+			fd.append("reason", form.reason);
+			axios
+				.post(`${API_BASE}createAppointment`, fd, {
+					"Content-Type": "multipart/form-data",
+				})
+				.then(({ data }) => {
+					window.location = data.redirect;
+				})
+				.catch((res) => {
+					setError(
+						"This appointment just got reserved! Please chose a different time or date."
+					);
+				});
+		} else {
+			setError("All fields are required");
+		}
+	};
 	return (
 		<>
 			{/* remove the container class before compiling  */}
-			<div className="container flex justify-center gap-20">
-				<Calendar
-					value={null}
-					minDetail="month"
-					locale="EN-en"
-					minDate={new Date(2023, 4, 25)}
-					onClickDay={(value) => {
-						if (["Saturday", "Sunday"].includes(days[value.getDay()])) {
-							setSelectedDate(null);
-							setSelectedTime(null);
-						} else {
-							setSelectedDate(formatDate(value));
-							setSelectedTime("");
-						}
-					}}
-				/>
-				<div>
+			<div className="flex justify-center gap-20">
+				<div className="w-[50%] ">
+					<Calendar
+						value={null}
+						className="m-auto mt-10 scalex-110"
+						minDetail="month"
+						locale="EN-en"
+						minDate={new Date()}
+						onClickDay={(value) => {
+							if (["Saturday", "Sunday"].includes(days[value.getDay()])) {
+								setSelectedDate(null);
+								setSelectedTime(null);
+							} else {
+								setSelectedDate(formatDate(value));
+								setSelectedTime("");
+							}
+						}}
+					/>
+				</div>
+				<div className="w-[50%]">
+					{error && <p className="text-red-700">{error}</p>}
 					{!selectedDate ? (
 						<p>Select a date to view available appointments</p>
 					) : (
-						<div>
+						<div className="flex flex-col">
 							<p>Date selected : {selectedDate}</p>
 							<p>Select a time for your appointment from the list below</p>
 							{typeof selectedTime === "string" ? (
 								<select
 									name=""
 									id=""
-									className="outline-none border-[1px] border-blue-700 p-2 mb-4 rounded-lg w-full"
+									className="input"
 									onChange={({ target }) => {
 										setSelectedTime(target.value);
+										setError(null);
 									}}
 								>
 									<option value="">--:--</option>
-									{availableApps?.map((el,i) => (
-										<option key={i} value={el}>{el}</option>
+									{availableApps?.map((el, i) => (
+										<option key={i} value={el}>
+											{el}
+										</option>
 									))}
 								</select>
 							) : (
 								""
 							)}
+							<label htmlFor="">Patient name</label>
+							<input
+								type="text"
+								className="input"
+								onChange={handleNameChange}
+								value={form.name}
+							/>
+							<label htmlFor="">Appointment reason</label>
+							<textarea
+								onChange={handleReasonChange}
+								className="resize-none input h-24"
+								value={form.reason}
+							></textarea>
+							<button className="btn-default" onClick={submitForm}>
+								Book Appointment
+							</button>
 						</div>
 					)}
 				</div>

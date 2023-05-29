@@ -17,6 +17,7 @@ $router->get("/dashboard",[HomeController::class,'dashboard'],["auth","user"]);
 $router->post('/logout',[AuthController::class,'logout'],["auth","user"]);
 $router->get("/book",[BookingController::class,'book'],["auth","user"]);
 $router->get("/getAppointments",[BookingController::class,'getAppointments'],["auth","user"]);
+$router->post('/createAppointment',[BookingController::class,'createAppointment'],["auth","user"]);
 try {
     $router->route();
 } catch (Exception $e) {

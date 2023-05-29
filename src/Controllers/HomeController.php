@@ -51,10 +51,19 @@ class HomeController
             ["projection" => [
                 "fullname" => true,
                 "email" => true,
-                "_id"=>false,
+                "_id" => false,
             ]]
         )->toArray();
-        loadSession(["userData" => $data[0]]);
+        $appCollection = $nosql->getAppointmentsCollection();
+        $myAppointments = $appCollection->find(
+            ["user.email" => $_SESSION["user"]],
+            ["projection" => ["user" => 0, "_id" => 0]]
+        )->toArray();
+
+        loadSession([
+            "userData" => $data[0],
+            "appointments" => $myAppointments
+        ]);
         require_once '../src/Views/dashboard.php';
     }
 }

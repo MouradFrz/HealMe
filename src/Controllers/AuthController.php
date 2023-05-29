@@ -18,6 +18,9 @@ class AuthController
             if (password_verify($password, $data[0]->password)) {
                 $_SESSION['user'] = $email;
                 redirect('/dashboard');
+            } else {
+                loadSession(["error" => "Invalid credentials"]);
+                redirect('/login');
             }
         } else {
             loadSession(["error" => "Invalid credentials"]);

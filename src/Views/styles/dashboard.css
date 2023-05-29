@@ -18,15 +18,36 @@ body {
 .section {
     @apply h-[50%] border-l-[1px] border-blue-400;
 }
-.section.long{
+.section.long {
     @apply h-full;
 }
 .section > div {
-    @apply flex justify-between items-center ;
+    @apply flex justify-between items-center;
 }
 .section > div > h2 {
     @apply text-2xl font-semibold mx-4;
 }
 .section > div > a {
     @apply btn-default;
+}
+::-webkit-scrollbar {
+    @apply w-[10px];
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    /* @apply border-[1px] border-red-300; */
+    border-radius: 10px;
+    border: 1px solid rgb(252 165 165);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    @apply bg-red-500;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    @apply bg-red-500;
 }

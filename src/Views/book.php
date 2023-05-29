@@ -8,17 +8,16 @@
     <title>Book | HealMe</title>
     <link rel="stylesheet" href="./styles/book.css">
     <link rel="stylesheet" href="./styles/Calendar.css">
-    <script type="module" crossorigin="" src="./app/dist/assets/index-6112c779.js"></script>
+    <script type="module" crossorigin="" src="./app/dist/assets/index-09894fc9.js"></script>
 </head>
 
 <body>
     <div class="container">
         <?php require 'components/navbar.php' ?>
-        <main>
+        <main class="mt-5">
             <div id="root"></div>
         </main>
     </div>
-
 </body>
 
 </html>
