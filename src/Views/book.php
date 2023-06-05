@@ -8,7 +8,7 @@
     <title>Book | HealMe</title>
     <link rel="stylesheet" href="./styles/book.css">
     <link rel="stylesheet" href="./styles/Calendar.css">
-    <script type="module" crossorigin="" src="./app/dist/assets/index-09894fc9.js"></script>
+    <script type="module" crossorigin="" src="./app/dist/assets/index-2ead2732.js"></script>
 </head>
 
 <body>

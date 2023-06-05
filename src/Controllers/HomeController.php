@@ -57,7 +57,12 @@ class HomeController
         $appCollection = $nosql->getAppointmentsCollection();
         $myAppointments = $appCollection->find(
             ["user.email" => $_SESSION["user"]],
-            ["projection" => ["user" => 0, "_id" => 0]]
+            [
+                "projection" => ["user" => 0, "_id" => 0],
+                "sort" => [
+                    "created_at" => -1
+                ]
+            ]
         )->toArray();
 
         loadSession([

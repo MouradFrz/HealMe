@@ -18,3 +18,9 @@ function inSession($key){
 function clearSessionMessages(){
     unset($_SESSION['messages']);
 }
+
+function format_date($dateString) {
+    $date = new DateTime($dateString);
+    $formattedDate = $date->format('l, jS F Y');
+    return $formattedDate;
+}

@@ -69,6 +69,9 @@ function formatDate(date) {
 		months[date.getMonth()]
 	} ${date.getFullYear()}`;
 }
+function submitedDateFormat(date) {
+	return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+}
 function App() {
 	const [selectedDate, setSelectedDate] = useState(null);
 	const [selectedTime, setSelectedTime] = useState(null);
@@ -90,7 +93,7 @@ function App() {
 		if (selectedDate !== null) {
 			axios
 				.get(`${API_BASE}getAppointments`, {
-					params: { date: selectedDate },
+					params: { date: submitedDateFormat(selectedDate) },
 				})
 				.then((response) => {
 					setAvailableApps(
@@ -103,12 +106,11 @@ function App() {
 			setAvailableApps(null);
 		}
 	}, [selectedDate]);
-
 	const submitForm = () => {
-		if (form.name && form.reason && selectedTime) {
+		if (form.name && form.reason) {
 			const fd = new FormData();
 			fd.append("name", form.name);
-			fd.append("date", selectedDate);
+			fd.append("date", submitedDateFormat(selectedDate));
 			fd.append("time", selectedTime);
 			fd.append("reason", form.reason);
 			axios
@@ -133,19 +135,22 @@ function App() {
 			<div className="flex justify-center gap-20">
 				<div className="w-[50%] ">
 					<Calendar
-						value={null}
+						// value={null}
 						className="m-auto mt-10 scalex-110"
 						minDetail="month"
 						locale="EN-en"
-						minDate={new Date()}
+						minDate={
+							new Date().getHours() <= 2
+								? new Date()
+								: new Date(Date.now() + 86400000)
+						}
 						onClickDay={(value) => {
 							if (["Saturday", "Sunday"].includes(days[value.getDay()])) {
 								setSelectedDate(null);
-								setSelectedTime(null);
 							} else {
-								setSelectedDate(formatDate(value));
-								setSelectedTime("");
+								setSelectedDate(value);
 							}
+							setSelectedTime("");
 						}}
 					/>
 				</div>
@@ -155,12 +160,11 @@ function App() {
 						<p>Select a date to view available appointments</p>
 					) : (
 						<div className="flex flex-col">
-							<p>Date selected : {selectedDate}</p>
+							<p>Date selected : {formatDate(selectedDate)}</p>
 							<p>Select a time for your appointment from the list below</p>
 							{typeof selectedTime === "string" ? (
 								<select
-									name=""
-									id=""
+									value={selectedTime}
 									className="input"
 									onChange={({ target }) => {
 										setSelectedTime(target.value);
