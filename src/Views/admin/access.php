@@ -10,11 +10,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 
-<body>
-    <?php require __DIR__ . '/../components/admin_navbar.php'; ?>
-    <main class="flex">
-        <?php require __DIR__ . '/../components/admin_sidebar.php'; ?>
-        <section class="pt-4 px-6 w-[80%]">
+<body class="flex">
+    <?php require __DIR__ . '/../components/admin_sidebar.php'; ?>
+    <main class="flex flex-col w-[80%]">
+        <?php require __DIR__ . '/../components/admin_navbar.php'; ?>
+        <section class="pt-4 px-6 w-full">
             <h1 class="text-4xl font-bold">Access management</h1>
             <?php if (inSession('success')) { ?>
                 <p class="font-semibold p-4 bg-green-400 my-2 rounded-md"><?= sessionVar('success') ?></p>
