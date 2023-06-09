@@ -12,9 +12,12 @@ body {
 .container {
     @apply max-w-[1200px] w-[95%] m-auto;
 }
-.sidebar-element{
+.sidebar-element {
     @apply px-2 py-1 hover:bg-slate-200 rounded-lg;
 }
-.sidebar-element a{
+.sidebar-element a {
     @apply p-2 inline-block w-full font-semibold;
+}
+.stat-box {
+    @apply w-[25%] h-[120px] shadow-md  rounded-lg text-white flex items-center p-4;
 }

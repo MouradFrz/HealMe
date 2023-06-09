@@ -8,6 +8,42 @@ use MongoDB\BSON\ObjectID;
 
 class AdminController
 {
+    private static function checkIfTimePassed(String $time): bool //returns false if the appointment time has already passed
+    {
+        $exploded = explode(":", $time);
+        $currentHour = intval(date("H")) - 1;
+        $currentMinutes = intval(date("i"));
+
+        if ($currentHour < intval($exploded[0])) {
+            return true;
+        } elseif ($currentHour > intval($exploded[0])) {
+            return false;
+        } else {
+            if ($currentMinutes < intval($exploded[1] + 19)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+    public static function getCurrentAppointmentIndex(array $arr): int|null
+    {
+        $currentHour = intval(date("H"));
+        $currentMinutes = intval(date("i"));
+        foreach ($arr as $index => $element) {
+            $exploded = explode(":", $element['time']);
+            if (intval($exploded[0]) !== $currentHour) {
+                continue;
+            } else {
+                if (intval($exploded[1]) < $currentMinutes) {
+                    continue;
+                } else {
+                    return $index;
+                }
+            }
+        }
+        return null;
+    }
     public static function authenticate()
     {
         require_once '../src/Views/admin/authenticate.php';
@@ -29,6 +65,48 @@ class AdminController
     }
     public static function dashboard()
     {
+
+        $nosql = new NoSql();
+        $collection = $nosql->getAppointmentsCollection();
+
+        $todays = $collection->find(
+            ["date" => date('Y-m-d')],
+            ["projection" => ["time" => true, "name" => true]]
+        )->toArray();
+        $last100 = $collection->find(
+            [],
+            [
+                "projection" => ["time" => true, "name" => true, "date" => true],
+                "limit" => 100,
+            ]
+        )->toArray();
+        $lastWeeks = array_filter($last100, function ($element) {
+            return
+                date_create()->modify("-1 week")->format('Y-m-d') < $element["date"]
+                && $element["date"] <= date_create()->format('Y-m-d');
+        });
+
+        $tempResult = array_filter($todays, function ($element) {
+            return AdminController::checkIfTimePassed($element["time"]);
+        });
+        $result = [];
+        foreach ($tempResult as $element) {
+            array_push($result, $element);
+        }
+        $currentClient = "None";
+        $nextClient = "None";
+        if (isset($result[0])) {
+            $currentClient = $result[0];
+        }
+        if (isset($result[1])) {
+            $nextClient = $result[1];
+        }
+        loadSession([
+            "todaysCount" =>  count($todays) - count($result) . "/" . count($todays),
+            "currentClientName" => $currentClient,
+            "nextClientName" => $nextClient,
+            "lastWeeks" => count($lastWeeks),
+        ]);
         require_once '../src/Views/admin/dashboard.php';
     }
     public static function accessControl()

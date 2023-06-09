@@ -70,7 +70,9 @@ function formatDate(date) {
 	} ${date.getFullYear()}`;
 }
 function submitedDateFormat(date) {
-	return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+	return `${date.getFullYear()}-${date.getMonth() + 1 <= 9 ? "0" : ""}${
+		date.getMonth() + 1
+	}-${date.getDate() <= 9 ? "0" : ""}${date.getDate()}`;
 }
 function App() {
 	const [selectedDate, setSelectedDate] = useState(null);
