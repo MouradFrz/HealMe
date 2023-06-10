@@ -8,6 +8,53 @@ use MongoDB\BSON\ObjectID;
 
 class AdminController
 {
+    private static function getLastWeekStats(): array
+    {
+        $nosql = new NoSql();
+        $collection = $nosql->getAppointmentsCollection();
+        $endDate = date('Y-m-d');
+        $startDate = date('Y-m-d', strtotime('-1 week'));
+        $matchStage = [
+            '$match' => [
+                'date' => [
+                    '$gte' => $startDate,
+                    '$lt' => $endDate
+                ]
+            ]
+        ];
+        $groupStage = [
+            '$group' => [
+                '_id' => ['date' => '$date'],
+                'count' => ['$sum' => 1]
+            ]
+        ];
+        $sortStage = [
+            '$sort' => ['date' => -1]
+        ];
+        $pipeline = [$matchStage, $groupStage, $sortStage];
+        $options = [];
+        $result = $collection->aggregate($pipeline, $options)->toArray();
+        return $result;
+    }
+    private static function getCrenoStats(): array
+    {
+        $nosql = new NoSql();
+        $collection = $nosql->getAppointmentsCollection();
+        $pipeline = [
+            [
+                '$group' => [
+                    '_id' => ['time' => '$time'],
+                    'count' => ['$sum' => 1]
+                ]
+            ],
+            [
+                '$sort' => ['count' => 1]
+            ]
+        ];
+        $options = [];
+        $result = $collection->aggregate($pipeline, $options)->toArray();
+        return $result;
+    }
     private static function checkIfTimePassed(String $time): bool //returns false if the appointment time has already passed
     {
         $exploded = explode(":", $time);
@@ -65,14 +112,19 @@ class AdminController
     }
     public static function dashboard()
     {
-
+        //Fetching stats for the charts
+        $barStats = Self::getCrenoStats();
+        $lineStats = Self::getLastWeekStats();
+        //--------------------------------------------------
         $nosql = new NoSql();
         $collection = $nosql->getAppointmentsCollection();
-
+        //Fetching todays appointments
         $todays = $collection->find(
             ["date" => date('Y-m-d')],
-            ["projection" => ["time" => true, "name" => true]]
+            ["projection" => ["time" => true, "name" => true, "user" => true]]
         )->toArray();
+        //--------------------------------------------------
+        //Fetching the last 100 appoitments then filtering them by date(Leaving last weeks appointments only)
         $last100 = $collection->find(
             [],
             [
@@ -85,7 +137,7 @@ class AdminController
                 date_create()->modify("-1 week")->format('Y-m-d') < $element["date"]
                 && $element["date"] <= date_create()->format('Y-m-d');
         });
-
+        //---------------------------------------------------------------
         $tempResult = array_filter($todays, function ($element) {
             return AdminController::checkIfTimePassed($element["time"]);
         });
@@ -102,10 +154,13 @@ class AdminController
             $nextClient = $result[1];
         }
         loadSession([
+            "todaysAppointments" => $todays,
             "todaysCount" =>  count($todays) - count($result) . "/" . count($todays),
             "currentClientName" => $currentClient,
             "nextClientName" => $nextClient,
             "lastWeeks" => count($lastWeeks),
+            "barStats" => $barStats,
+            "lineStats" => $lineStats,
         ]);
         require_once '../src/Views/admin/dashboard.php';
     }

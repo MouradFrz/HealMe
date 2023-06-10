@@ -30,7 +30,7 @@
                     <div>
                         <h1>Appointments last week</h1>
                         <p class="font-bold">
-                        <?= sessionVar('lastWeeks') ?>
+                            <?= sessionVar('lastWeeks') ?>
                         </p>
                     </div>
                 </div>
@@ -39,9 +39,9 @@
                     <div>
                         <h1>Current appointment</h1>
                         <p class="font-bold">
-                        <?php if (isset(sessionVar('currentClientName')['name'])) {
+                            <?php if (isset(sessionVar('currentClientName')['name'])) {
                                 echo sessionVar('currentClientName')['name'] . 'at' . sessionVar('currentClientName')['time'];
-                            }else{
+                            } else {
                                 echo "None";
                             } ?>
                         </p>
@@ -54,14 +54,14 @@
                         <p class="font-bold">
                             <?php if (isset(sessionVar('nextClientName')['name'])) {
                                 echo sessionVar('nextClientName')['name'] . 'at' . sessionVar('nextClientName')['time'];
-                            }else{
+                            } else {
                                 echo "None";
                             } ?>
                         </p>
                     </div>
                 </div>
             </div>
-            <div class="h-[1000px] flex gap-2">
+            <div class="flex gap-2 mb-5">
                 <div class="w-[50%]">
                     <canvas id="barChart"></canvas>
                 </div>
@@ -69,22 +69,48 @@
                     <canvas id="lineChart"></canvas>
                 </div>
             </div>
+            <hr class="bg-blue-600">
+            <div>
+                <?php if (count(sessionVar('todaysAppointments'))) { ?>
+                    <table class="text-left table-auto border-separate mt-4 w-full">
+                        <tr class="py-5">
+                            <th>Name</th>
+                            <th>Time at</th>
+                            <th>Account name</th>
+                        </tr>
+                        <?php foreach (sessionVar('todaysAppointments') as $appointment) { ?>
+                            <tr>
+                                <td><?= $appointment["name"] ?></td>
+                                <td><?= $appointment["time"] ?></td>
+                                <td>
+                                    <?= $appointment["user"]["fullname"] ?>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                    </table>
+                <?php } else { ?>
+                    <p class="font-bold text-center text-3xl">You have no apppointments today</p>
+                <?php } ?>
+            </div>
         </section>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
+        const barStats = <?php echo json_encode(sessionVar("barStats")); ?>;
+        const barData = {
+            labels: barStats.map(el => el._id.time),
+            datasets: [{
+                label: "Appointments count",
+                data: barStats.map(el => el.count),
+                borderWidth: 2,
+                backgroundColor: ["rgb(37 99 235)"],
+            }]
+        }
         const ctx = document.getElementById('barChart');
         new Chart(ctx, {
             type: 'bar',
-            data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    borderWidth: 1
-                }]
-            },
+            data: barData,
             options: {
                 scales: {
                     y: {
@@ -93,23 +119,22 @@
                 }
             }
         });
-
-
-        const data = {
-            labels: ["Jan", "Feb", "March", "April", "May", "June", "July"],
+        const lineStats = <?php echo json_encode(sessionVar("lineStats")); ?>;
+        const lineData = {
+            labels: lineStats.map(el => el._id.date),
             datasets: [{
-                label: 'My First Dataset',
-                data: [65, 59, 80, 81, 56, 55, 40],
+                label: 'Appointments per day for the last week',
+                data: lineStats.map(el => el.count),
                 fill: false,
                 borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1
+                tension: 0.2
             }]
         };
 
         const line = document.getElementById('lineChart');
         new Chart(line, {
             type: 'line',
-            data: data,
+            data: lineData,
         });
     </script>
 </body>
