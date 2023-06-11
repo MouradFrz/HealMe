@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+input[type="date"] {
+    @apply p-4 text-2xl bg-yellow-500 outline-none focus:bg-yellow-600;
+}
+.passed {
+    @apply bg-blue-500 p-1 rounded-md;
+}
+.upcoming {
+    @apply bg-yellow-500 p-1 rounded-md;
+}
+section .loader {
+    @apply hidden;
+}
+
+section.show-loader table {
+    @apply hidden;
+}
+
+section.show-loader .loader {
+    @apply block;
+}
+table {
+    border-collapse: separate;
+    border-spacing: 0.5rem;
+}

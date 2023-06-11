@@ -205,4 +205,56 @@ class AdminController
         unset($_SESSION["admin"]);
         redirect('/authenticate');
     }
+    public static function appointments()
+    {
+        require_once '../src/Views/admin/appointments.php';
+    }
+    public static function getAppointmentsList()
+    {
+        header('Content-Type: application/json; charset=UTF-8');
+        $date = $_GET["date"];
+        $nosql = new NoSql();
+        $collection = $nosql->getAppointmentsCollection();
+        //Fetch the appointments for the date entered
+        $filter = [
+            "date" => $date,
+        ];
+        $options = [
+            "projection" => [
+                "name" => true,
+                'created_at' => true,
+                "time" => true,
+                "_id" => false
+            ]
+        ];
+        $results = $collection->find($filter, $options)->toArray();
+        $formattedResults = [];
+        $todaysDate =  date_create("now")->format("Y-m-d");
+        foreach ($results as $appointment) {
+            $item = [];
+            $item["name"] = $appointment["name"];
+            $item["created_at"] = $appointment["created_at"]->toDateTime()->format("Y-m-d H:i");
+            $item["time"] = $appointment["time"];
+            if ($todaysDate == $date) {
+                $item["status"] = Self::checkIfTimePassed($appointment["time"]) ? "Upcoming" : "Passed";
+            } elseif ($todaysDate > $date) {
+                $item["status"] = "Passed";
+            } else {
+                $item["status"] = "Upcoming";
+            }
+            array_push($formattedResults, $item);
+        }
+        //Check if the date is equal to todays date
+
+
+
+
+        echo json_encode($formattedResults);
+        die;
+        //Test if time has passed and add a status attribute depending on that
+        // Else if the date is bigger than today so we set the status for all of them to upcoming
+        // Else set it to passed for all of them
+
+        // echo "hi";
+    }
 }

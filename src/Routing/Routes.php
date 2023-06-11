@@ -27,6 +27,8 @@ $router->get('/admin/access-control', [AdminController::class, 'accessControl'],
 $router->post('/admin/generate-token', [AdminController::class, 'generateToken'], ["auth", "admin"]);
 $router->post('/admin/delete-token', [AdminController::class, 'deleteToken'], ["auth", "admin"]);
 $router->post('/admin/logout', [AdminController::class, 'logout'], ["auth", "admin"]);
+$router->get('/admin/appointments', [AdminController::class, 'appointments'], ["auth", "admin"]);
+$router->get('/admin/appointments-list', [AdminController::class, 'getAppointmentsList'], ["auth", "admin"]);
 
 try {
     $router->route();

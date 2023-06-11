@@ -40,7 +40,7 @@
                         <h1>Current appointment</h1>
                         <p class="font-bold">
                             <?php if (isset(sessionVar('currentClientName')['name'])) {
-                                echo sessionVar('currentClientName')['name'] . 'at' . sessionVar('currentClientName')['time'];
+                                echo sessionVar('currentClientName')['name'] . ' at ' . sessionVar('currentClientName')['time'];
                             } else {
                                 echo "None";
                             } ?>
