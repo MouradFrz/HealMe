@@ -29,13 +29,27 @@ class BookingController
         header('Content-Type: application/json; charset=UTF-8');
         $nosql = new NoSql();
         $date = $_GET['date'];
-        try {
-            $collection = $nosql->getAppointmentsCollection();
-            $data = $collection->find(["date" => $date], ["projection" => ["_id" => false, "time" => true]])->toArray();
-        } catch (Exception $e) {
-            echo $e->getMessage();
+        $down = false;
+
+        $collection = $nosql->getDowntimesCollection();
+        $downtimes = $collection->find([], ["projection" => ["startdate" => true, "enddate" => true, "_id" => false]])->toArray();
+
+        foreach ($downtimes as $dt) {
+            if ($date >= $dt["startdate"] && $date <= $dt["enddate"]) {
+                $down = true;
+            }
         }
-        echo json_encode($data);
+        if (!$down) {
+            try {
+                $collection = $nosql->getAppointmentsCollection();
+                $data = $collection->find(["date" => $date], ["projection" => ["_id" => false, "time" => true]])->toArray();
+            } catch (Exception $e) {
+                echo $e->getMessage();
+            }
+            echo json_encode(["type" => "available", "takenTimes" => $data]);
+        } else {
+            echo json_encode(["type" => "down"]);
+        }
     }
     public static function createAppointment()
     {

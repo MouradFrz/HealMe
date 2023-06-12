@@ -75,7 +75,7 @@
                     <table class="text-left table-auto border-separate mt-4 w-full">
                         <tr class="py-5">
                             <th>Name</th>
-                            <th>Time at</th>
+                            <th>Time</th>
                             <th>Account name</th>
                         </tr>
                         <?php foreach (sessionVar('todaysAppointments') as $appointment) { ?>

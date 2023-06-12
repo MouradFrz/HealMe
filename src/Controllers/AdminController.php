@@ -215,7 +215,6 @@ class AdminController
         $date = $_GET["date"];
         $nosql = new NoSql();
         $collection = $nosql->getAppointmentsCollection();
-        //Fetch the appointments for the date entered
         $filter = [
             "date" => $date,
         ];
@@ -244,17 +243,51 @@ class AdminController
             }
             array_push($formattedResults, $item);
         }
-        //Check if the date is equal to todays date
-
-
-
-
         echo json_encode($formattedResults);
-        die;
-        //Test if time has passed and add a status attribute depending on that
-        // Else if the date is bigger than today so we set the status for all of them to upcoming
-        // Else set it to passed for all of them
-
-        // echo "hi";
+    }
+    public static function downtimeManagement()
+    {
+        $nosql = new NoSql();
+        $collection = $nosql->getDowntimesCollection();
+        $data = $collection->find([], [
+            "projection" => [
+                "startdate" => true,
+                "enddate" => true,
+                "_id" => false,
+            ]
+        ])->toArray();
+        $todaysDate =  date_create("now")->format("Y-m-d");
+        foreach ($data as $dt) {
+            if ($dt["startdate"] > $todaysDate) {
+                $dt["status"] = "Upcoming";
+            } elseif ($dt["enddate"] < $todaysDate) {
+                $dt["status"] = "Passed";
+            } else {
+                $dt["status"] = "Ongoing";
+            }
+        }
+        loadSession(["downtimes" => $data]);
+        require_once '../src/Views/admin/downtime.php';
+    }
+    public static function createDowntime()
+    {
+        require_once '../src/Views/admin/add-downtime.php';
+    }
+    public static function newDowntime()
+    {
+        $startDate = $_POST["startdate"];
+        $endDate = $_POST["enddate"];
+        if (!$startDate || !$endDate) {
+            loadSession(["error" => "You need to specify a start and end date."]);
+            redirect('/admin/create-downtime');
+        }
+        $nosql = new NoSql();
+        $collection = $nosql->getDowntimesCollection();
+        $collection->insertOne([
+            "startdate" => $startDate,
+            "enddate" => $endDate,
+        ]);
+        loadSession(["success" => "Downtime created successfully."]);
+        redirect('/admin/downtime-management');
     }
 }

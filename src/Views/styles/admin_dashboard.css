@@ -21,3 +21,17 @@ body {
 .stat-box {
     @apply w-[25%] h-[120px] shadow-md  rounded-lg text-white flex items-center p-4;
 }
+.Upcoming {
+    @apply bg-blue-500 p-1 rounded-md;
+}
+.Ongoing {
+    @apply bg-green-500 p-1 rounded-md;
+}
+.Passed {
+    @apply bg-gray-500 p-1 rounded-md;
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 0.5rem;
+}

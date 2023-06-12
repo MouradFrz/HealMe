@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="./styles/home.css">
 </head>
 
-<body class="bg-[url('../images/main_bg.jpg')] bg-no-repeat bg-cover">
+<body class="bg-[url('../images/main_bg2.jpg')] bg-no-repeat bg-cover">
     <div class="container">
         <nav class="py-4 flex justify-between items-center">
             <div class="flex gap-4">

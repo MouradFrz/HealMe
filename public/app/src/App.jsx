@@ -97,12 +97,20 @@ function App() {
 				.get(`${API_BASE}getAppointments`, {
 					params: { date: submitedDateFormat(selectedDate) },
 				})
-				.then((response) => {
-					setAvailableApps(
-						APP_TIMES.filter(
-							(el) => !response.data.map((element) => element.time).includes(el)
-						)
-					);
+				.then(({ data }) => {
+					if (data.type === "down") {
+						setSelectedDate(null);
+						setError(
+							"Unfortunately, appointments are not available on the date you selected, please select another date."
+						);
+					} else {
+						setAvailableApps(
+							APP_TIMES.filter(
+								(el) =>
+									!data.takenTimes.map((element) => element.time).includes(el)
+							)
+						);
+					}
 				});
 		} else {
 			setAvailableApps(null);
@@ -147,6 +155,7 @@ function App() {
 								: new Date(Date.now() + 86400000)
 						}
 						onClickDay={(value) => {
+							setError("");
 							if (["Saturday", "Sunday"].includes(days[value.getDay()])) {
 								setSelectedDate(null);
 							} else {

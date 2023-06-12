@@ -29,6 +29,9 @@ $router->post('/admin/delete-token', [AdminController::class, 'deleteToken'], ["
 $router->post('/admin/logout', [AdminController::class, 'logout'], ["auth", "admin"]);
 $router->get('/admin/appointments', [AdminController::class, 'appointments'], ["auth", "admin"]);
 $router->get('/admin/appointments-list', [AdminController::class, 'getAppointmentsList'], ["auth", "admin"]);
+$router->get('/admin/downtime-management', [AdminController::class, 'downtimeManagement'], ['auth', 'admin']);
+$router->get('/admin/create-downtime', [AdminController::class, 'createDowntime'], ['auth', 'admin']);
+$router->post('/admin/create-downtime', [AdminController::class, 'newDowntime'], ['auth', 'admin']);
 
 try {
     $router->route();
